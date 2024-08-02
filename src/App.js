@@ -40,7 +40,7 @@ function App() {
       <div className='container'>
       {
         data.map( word => (
-            <p style={{fontSize: `${word.quantity * 20}px`, margin: '0 20px'}}>{word._id}</p>
+            <p style={{fontSize: `${word.quantity * 32}px`, margin: '0 20px'}}>{word._id}</p>
         ))
       }
       </div>

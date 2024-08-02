@@ -8,25 +8,33 @@ let page = 1
 function App() {
   const [data, setData] = useState([])
 
-  const getWordData = async () => {
-      const result = await axios.get(`http://localhost:8080/words?page=${page}`)
-      setData(result.data.docs);
-  }
+  // const getWordData = async () => {
+  //     const result = await axios.get(`http://localhost:8080/words?page=${page}`)
+  //     setData(result.data.docs);
+  // }
 
   useEffect(() => {
     // loadFirstPage()
-    getWordData();
+    // getWordData();
 
   }, []);
 
   const handleMas = async() => {
 
-      page += 1;
-      console.log(page);
+      page = 1
+
       const result = await axios.get(`http://localhost:8080/words?page=${page}`)
 
       if(result.data.totalPages >= page){
+        setData(result.data.docs);
+      }
+
+      page += 1;
+
+      while(result.data.totalPages >= page){
+        const result = await axios.get(`http://localhost:8080/words?page=${page}`)
         setData(prevData => [...prevData, ...result.data.docs]);
+        page += 1;
       }
 
   }
@@ -40,12 +48,12 @@ function App() {
       <div className='container'>
       {
         data.map( word => (
-            <p style={{fontSize: `${word.quantity * 32}px`, margin: '0 20px'}}>{word._id}</p>
+            <p style={{fontSize: `${word.quantity * 20}px`, margin: '0 20px'}}>{word._id}</p>
         ))
       }
       </div>
       <div className='container'>
-      <button className='mas' onClick={handleMas}>Mas</button>
+      <button className='mas' onClick={handleMas}>Word Cloud</button>
       </div>
       
     </div>
@@ -53,3 +61,50 @@ function App() {
 }
 
 export default App;
+
+// function App() {
+//   const [data, setData] = useState([])
+
+//   const getWordData = async () => {
+//       const result = await axios.get(`http://localhost:8080/words?page=${page}`)
+//       setData(result.data.docs);
+//   }
+
+//   useEffect(() => {
+//     // loadFirstPage()
+//     getWordData();
+
+//   }, []);
+
+//   const handleMas = async() => {
+
+//       page += 1;
+//       console.log(page);
+//       const result = await axios.get(`http://localhost:8080/words?page=${page}`)
+
+//       if(result.data.totalPages >= page){
+//         setData(prevData => [...prevData, ...result.data.docs]);
+//       }
+
+//   }
+
+//   useEffect(() => {
+//     console.log(data);
+//   }, [data]);
+
+//   return (
+//     <div className="App">
+//       <div className='container'>
+//       {
+//         data.map( word => (
+//             <p style={{fontSize: `${word.quantity * 32}px`, margin: '0 20px'}}>{word._id}</p>
+//         ))
+//       }
+//       </div>
+//       <div className='container'>
+//       <button className='mas' onClick={handleMas}>Mas</button>
+//       </div>
+      
+//     </div>
+//   );
+// }
